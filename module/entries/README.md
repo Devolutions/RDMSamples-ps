@@ -22,6 +22,6 @@ Connection
     ... and so on for ALL entry types 
 ```
 
-The "entries" folder will therefore be organized a structure as close a possible to the Connection class
+The "entries" folder will therefore be organized a structure as close a possible to the Connection class, exception being of root properties that will be contained in the "Root Properties" folder.
     
 
