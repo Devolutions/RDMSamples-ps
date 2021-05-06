@@ -8,7 +8,6 @@
   then make the needed edits to the entry and then re-parenting the entry
 
 .PARAMETER <Parameter_Name>
-  <Brief description of parameter input required. Repeat this attribute if required>
 
 .INPUTS
   Confirmation will be required for EACH Un-Parent
