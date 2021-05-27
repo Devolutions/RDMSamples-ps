@@ -16,9 +16,9 @@ $RDM.Save();
 
 To retrieve the exact name of the field, right-click on your session and select Clipboard > Copy. Switch over to the Preview tab, or you can paste the information in a text editor to retrieve the name of the field(s) that you would like to modify via the Custom PowerShell Command.
 
-> @icon-info-circle***Note:** Your session will need to have the fields you are trying to find configured with fake/real information before doing the above step. IE: If you want to get the Host field, the host field will need to have text before doing the right-click Clipboard > Copy*
+> ***Note:** Your session will need to have the fields you are trying to find configured with fake/real information before doing the above step. IE: If you want to get the Host field, the host field will need to have text before doing the right-click Clipboard > Copy*
 
-> @icon-info-circle**Reference**: [Custom PowerShell Script][1]
+> **Reference**: [Custom PowerShell Script][1]
 
 ## How to get started
 
@@ -42,13 +42,16 @@ $connection.Name = "Super PC";
   
 </Connection>
 ```
-> @icon-info-circle***Note**: There are many different subgroups within RDM, to name a few simpler ones: **HostDetails**, **Terminal**, **MetaInformation**.*
+> ***Note**: There are many different subgroups within RDM, to name a few simpler ones: **HostDetails**, **Terminal**, **MetaInformation**.*
 
-* Thirdly, for data types that need to be change. We have two  ***Strings and Bools***. If you wanted to change a checkbox ( *bool* ) you would need to use ***$true or $false***. If not a checkbox you would be looking at changing a string which need to be in quotes. For example:  
+* Thirdly, for data types that need to be change. We have a few  ***Strings, Dropdowns and Bools***. If you wanted to change a checkbox ( *bool* ) you would need to use ***$true or $false***. If you want to change a drop down you would need to use single quotes ''. If its a textbox you would be looking at changing a string which need to be in double quotes "". For example:  
 
 ```powershell
 # Bool type
 $connection.Terminal.UseSftpForFileTransfer = $true;
+
+# Dropdowns types
+$connection.VPN.Mode = 'Inherited';
 
 # String type
 $connection.Name = "Super PC";
@@ -60,7 +63,7 @@ $connection.Name = "Super PC";
 $RDM.Save();
 ```
 
-> @icon-info-circle [Some more examples][2]
+> [Some more examples][2]
 
 
   [1]: https://help.remotedesktopmanager.com/pscustomactions.html
