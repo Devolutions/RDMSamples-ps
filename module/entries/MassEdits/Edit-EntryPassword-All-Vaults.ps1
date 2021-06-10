@@ -32,7 +32,9 @@
 $ErrorActionPreference = 'SilentlyContinue'
 
 #Import Modules & Snap-ins
-Import-Module RemoteDesktopManager.PowerShellModule
+if ( ! (Get-Module RemoteDesktopManager.PowerShellModule)) {
+Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1"
+}
 
 #---------------------------------[Functions]----------------------------------
 
@@ -41,11 +43,12 @@ Import-Module RemoteDesktopManager.PowerShellModule
 
 $repos = Get-RDMRepository
 $newPass = Read-Host "Enter new password" -AsSecureString
+$EntryName = Read-Host "Enter name of entry for password change"
 
 foreach ($r in $repos)
 {
     Set-RDMCurrentRepository $r
-    $creds = Get-RDMSession | Where-Object {$_.Name -EQ "ChangeME" -and $_.ConnectionType -eq "Credential"}
+    $creds = Get-RDMSession | Where-Object {$_.Name -EQ $EntryName -and $_.ConnectionType -eq "Credential"}
     Set-RDMSessionPassword $creds.ID -Password $newPass
 
     Write-Host $r.Name"\"$creds.Name"password has been successfully change."
