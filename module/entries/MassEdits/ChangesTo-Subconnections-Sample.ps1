@@ -30,7 +30,9 @@
 $ErrorActionPreference = 'SilentlyContinue'
 
 #Import Modules & Snap-ins
-Import-Module RemoteDesktopManager.PowerShellModule
+if ( ! (Get-Module RemoteDesktopManager.PowerShellModule)) {
+Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1"
+}
 
 #---------------------------------[Functions]----------------------------------
 
