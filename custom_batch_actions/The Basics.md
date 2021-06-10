@@ -22,7 +22,7 @@ To retrieve the exact name of the field, right-click on your session and select 
 
 ## How to get started
 
-So you have your information needing to be changed now. What do you do now...
+So you have your information needing to be changed, what do you do now...
 
 *  Firstly, the beginning of each piece of information being changed needs to start with **$connection**. For example: 
 ```powershell
@@ -44,7 +44,7 @@ $connection.Name = "Super PC";
 ```
 > ***Note**: There are many different subgroups within RDM, to name a few simpler ones: **HostDetails**, **Terminal**, **MetaInformation**.*
 
-* Thirdly, for data types that need to be change. We have a few  ***Strings, Dropdowns and Bools***. If you wanted to change a checkbox ( *bool* ) you would need to use ***$true or $false***. If you want to change a drop down you would need to use single quotes ''. If its a textbox you would be looking at changing a string which need to be in double quotes "". For example:  
+* Thirdly, for data types that need to be change. We have different data types in RDM, ***Strings, Dropdowns and Bools*** to name a few. If you wanted to change a checkbox ( *bool* ) you would need to use ***$true or $false***. If you want to change a drop down you would need to use single quotes ''. If its a textbox you would be looking at changing a string which need to be in double quotes "". For example:  
 
 ```powershell
 # Bool type
@@ -58,7 +58,7 @@ $connection.Name = "Super PC";
 ```
 
 
-*  To conclude, it is very important that you always end with the following code to the change are saved: 
+*  Finally, it is very important that you always end with the following code to confirm the changes are saved: 
 ```powershell
 $RDM.Save();
 ```
