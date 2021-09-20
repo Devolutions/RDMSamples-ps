@@ -1,6 +1,16 @@
 ###########################################################################
 #
-# This function will rename the user group and change the permissions that contain it
+#This PowerShell script will rename a role and edit all permissions.
+#
+#Rename-Role "OldRoleName" "NewRoleName" "MyDataSourceName" $true
+#
+#Parameter 1 : Old role name
+#Parameter 2 : New role name
+#Parameter 3 : Display name of the data source
+#Parameter 4 : $True = rename the role and change the role name in the permissions
+#                       $false = only change the role name in the permissions
+#
+#
 #
 ###########################################################################
 
