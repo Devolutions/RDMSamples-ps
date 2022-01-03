@@ -15,7 +15,10 @@
 ###########################################################################
 
 # Load RDM PowerShell module. 
-Import-Module RemoteDesktopManager -Force
+# Adapt the folder's name if you are not using the default installation path.
+if ( ! (Get-Module RemoteDesktopManager.PowerShellModule)) {
+    Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1"
+}
 
 function Rename-Role
 {
@@ -26,12 +29,13 @@ function Rename-Role
         [string]$newRoleName,
         [Parameter(Mandatory=$True,Position=3)]
         [string]$dsName,
-        [Parameter(Mandatory=$True,Position=3)]
+        [Parameter(Mandatory=$True,Position=4)]
         [bool]$chgRole		
     )
 
     $ds = Get-RDMDataSource -Name $dsName
     Set-RDMCurrentDataSource $ds
+    Update-RDMUI
 
     # Renaming the role
     if ($chgRole)
@@ -57,8 +61,12 @@ function Rename-Role
     foreach ($repository in $repositories)
     {
         Set-RDMCurrentRepository $repository
+        Update-RDMUI
 
         $sessions = Get-RDMSession
+        new-rdm
+        New-RDMSession -Type RDP -
+
 
         foreach ($session in $sessions)
         {
@@ -100,5 +108,6 @@ function Rename-Role
         }
     }
 
+    Update-RDMUI
     Write-Output "Done!!!"
 }
