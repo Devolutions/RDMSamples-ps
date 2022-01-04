@@ -64,10 +64,7 @@ function Rename-Role
         Update-RDMUI
 
         $sessions = Get-RDMSession
-        new-rdm
-        New-RDMSession -Type RDP -
-
-
+      
         foreach ($session in $sessions)
         {
             [bool]$updateView = $false
