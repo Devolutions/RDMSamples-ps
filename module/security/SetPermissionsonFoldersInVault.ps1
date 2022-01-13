@@ -125,8 +125,8 @@ foreach ($CSVPerm in $CSVpermissions)
                     $permission.Override = "Custom"
                     [string]$tempPerm = $object_properties.Value
                     $permStr = $tempPerm -replace [Regex]::Escape(";"), ", "
-                    $permission.Roles = $perm
                     $perm = $tempPerm.Split(';')
+                    $permission.Roles = $perm
                     $permission.RoleValues = $permStr
                 }
                 $otherPermissions += $permission
