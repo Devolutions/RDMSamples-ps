@@ -1,8 +1,13 @@
 #source: https://forum.devolutions.net/topics/33523/programmatically-setting-userspecific-settings
 
-if (-not (Get-Module RemoteDesktopManager.PowerShellModule)) {
-    Import-Module 'C:\Program Files (x86)\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1'
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
 }
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 $pv = Get-RDMPrivateSession -Name MyCreds
 $sess = Get-RDMSession -Name MyRDPSession

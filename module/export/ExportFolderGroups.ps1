@@ -1,10 +1,14 @@
 #source: https://forum.devolutions.net/topics/35643/export-certain-foldersgroups
 
-Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1"
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
 
-#get datasource and set it as current datasource to use as default
-$datasource = Get-RDMDataSource #-Name CloudSolutions
-Set-RDMCurrentDataSource $datasource[0].ID
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
+
 $sessions = Get-RDMSession | where {$_.ConnectionType -eq "Group" -and $_.Group.Split('\').Length -le 2} 
 $CSVFileName = $PSScriptRoot + '\LimitedExport.csv'
 Write-Output "writing to $CSVFileName"

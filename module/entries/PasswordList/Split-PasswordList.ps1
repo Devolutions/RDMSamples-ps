@@ -1,4 +1,3 @@
-#requires -version 4
 <#
 .SYNOPSIS
   Splits Password List entries in single credential entries.
@@ -31,8 +30,10 @@ Param (
 #Set Error Action to Silently Continue
 $ErrorActionPreference = 'SilentlyContinue'
 
-#Import Modules & Snap-ins
-Import-Module RemoteDesktopManager.PowerShellModule
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
 
 #--------------------------------[Declarations]--------------------------------
 

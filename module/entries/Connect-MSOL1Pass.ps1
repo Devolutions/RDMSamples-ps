@@ -1,5 +1,12 @@
 #source: https://forum.devolutions.net/topics/35567/powershell-session--login-to-365-services-without-the-need-to-fill-in-
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
 
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 $session = Get-RDMSession -Name 1password
 $user = Get-RDMSessionUsername -Session $session

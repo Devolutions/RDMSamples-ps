@@ -1,9 +1,13 @@
 #source: https://forum.devolutions.net/topics/34839/creer-session-rdm-dans-un-datasource-rdms
 
-Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1"
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
 
-$s = Get-RDMDataSource -Name GAMING1
-Set-RDMCurrentDataSource -DataSource $s
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 $csv = Import-CSV C:\Script\rdm.csv
 foreach ($list in $csv) {

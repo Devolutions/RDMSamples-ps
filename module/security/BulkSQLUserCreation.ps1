@@ -25,8 +25,10 @@
 #Set Error Action to Silently Continue
 $ErrorActionPreference = 'SilentlyContinue'
 
-#Import Modules & Snap-ins
-Import-Module RemoteDesktopManager.PowerShellModule
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
 
 
 #---------------------------------[Functions]----------------------------------

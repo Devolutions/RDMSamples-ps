@@ -3,7 +3,11 @@
 # This script will load the module from the default installation path
 #
 ###########################################################################
-Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1"
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
+
 <# 
     The Get-RDMInstance is useful to confirm not only which instance you are connected to in the case where you run
     multiple RDM's side by side, but it also returns the path of the configuration file that is loaded. This is useful 

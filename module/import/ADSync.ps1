@@ -1,4 +1,12 @@
 #source: https://forum.devolutions.net/topics/34932/the-poorly-privileged-mans-ad-sync
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 $rdmroot = "[YOUR-TOP-LEVEL-OU-HERE]"
 $readonly = $true # be very careful changing this to $false
