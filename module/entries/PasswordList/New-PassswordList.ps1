@@ -1,8 +1,13 @@
 #source: https://forum.devolutions.net/topics/30416/powershell--create-new-entry
 
-if (-not (Get-Module RemoteDesktopManager.PowerShellModule)) {
-    Import-Module 'C:\Program Files (x86)\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1'
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
 }
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 
 $ps = New-RDMSession -Name $entryName -Type Credential -Group $group.Group

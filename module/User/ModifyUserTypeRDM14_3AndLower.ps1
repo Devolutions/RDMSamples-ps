@@ -1,4 +1,12 @@
 #The following script will modify the User type property from Read only to User.
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 $users = Get-RDMUser
 foreach ($user in $users)

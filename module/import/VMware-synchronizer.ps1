@@ -1,4 +1,12 @@
 #source: https://forum.devolutions.net/topics/35520/improved-vmware-synchronizer-with-powershell
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 Write-Host 'Loading PowerCLI...'
 Import-Module VMware.PowerCLI

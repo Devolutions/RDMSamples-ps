@@ -3,6 +3,15 @@
 # This script will create a credential entry and an RDP entry using that newly generated credential.
 #
 ###########################################################################
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
+
 #create credential
 $creds =New-RDMSession -Name "creds" -Type Credential -Group "Credentials"
 $creds.Credentials.UserName="administrator"
