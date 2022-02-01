@@ -1,14 +1,12 @@
-
-
-Import-Module RemoteDesktopManager
-
 #source: https://forum.devolutions.net/topics/8476/inventory-report-and-populating-information-tab
-if (-not (Get-Module RemoteDesktopManager.PowerShellModule)) {
-    Import-Module 'C:\Program Files (x86)\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1'
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
 }
-# Set your DS (Data Source), mine is on our SQL server
-# You can find your data source under in your RDM under File/Data Sources
-$DS = Get-RDMDataSource -Name MySQLServerName
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 
 

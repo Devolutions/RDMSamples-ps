@@ -1,4 +1,3 @@
-#requires -version 4
 <#
 .SYNOPSIS
   Change password on an individual Credential entry shared between all Vaults
@@ -31,10 +30,14 @@
 #Set Error Action to Silently Continue
 $ErrorActionPreference = 'SilentlyContinue'
 
-#Import Modules & Snap-ins
-if ( ! (Get-Module RemoteDesktopManager.PowerShellModule)) {
-Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1"
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
 }
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 #---------------------------------[Functions]----------------------------------
 

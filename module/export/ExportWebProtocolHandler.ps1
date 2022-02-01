@@ -5,6 +5,15 @@
 #
 ###########################################################################
 #-----------------------------------[Main]-------------------------------------
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
+
 ## get the data source ID, note that the "Create Web Url" button generates a different ID, but both are accepted
 $dsid = Get-RDM-DataSource | where {$_.IsCurrent -eq "X"} | select -expand "ID"
 ## get the RDP sessions, create a new object with the desired fields.

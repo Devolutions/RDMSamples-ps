@@ -1,9 +1,14 @@
 #source: https://forum.devolutions.net/topics/33500/searching-over-all-vaults-and-generate-a-report
 
-# depending from where you run it, you might need to import the powershell module
-Import-Module "C:\Program Files (x86)\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1;"
-#If you have multiple data source configured on your RDM installation ;
-Set-RDMCurrentDataSource -DataSource (Get-RDMDataSource -Name '<DataSource Name>');
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
+
 # Set a Parameter for the limit date and csv File name
 $Expiration = get-date -Year 2021 -Month 4 -Day 7
 $FileName = 'c:\temp\ExpirationReport.csv'

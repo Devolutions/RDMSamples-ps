@@ -1,6 +1,9 @@
 #The following script will export all entries from all vaults as one file per vault. Each file is password protected.
 
-Import-Module 'C:\Program Files (x86)\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1'
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
 
 # Adapt the data source name
 $ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"

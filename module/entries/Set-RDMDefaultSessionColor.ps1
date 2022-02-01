@@ -1,8 +1,8 @@
 #source: https://forum.devolutions.net/topics/34454/changing-different-properties-on-sessions
 
-#Verify if the RDM PS module is loaded, if not, import it
-if ( ! (Get-module RemoteDesktopManager.PowerShellModule )) {
-    Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1" 
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
 }
 
 
