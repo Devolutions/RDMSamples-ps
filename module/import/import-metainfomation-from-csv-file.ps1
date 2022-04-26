@@ -31,23 +31,23 @@ Get-Content "C:\temp\RDMImportTest.csv" | ForEach-Object {
 	$BackupType = $fields[14] -replace "^""", "" -replace """$", ""
 	$Location = $fields[15] -replace "^""", "" -replace """$", ""
 
-	echo "Inserting RDM Entries from input line $lineno : $DeviceName"
+	Write-Output "Inserting RDM Entries from input line $lineno : $DeviceName"
 
 	$ServerEntry = New-RDMSession -Name $DeviceName -Type "RDPConfigured"
 	Set-RDMSession $ServerEntry 
 	Update-RDMUI
 	$SessionEntry.MetaInformation.MachineName = "$DeviceName" 
-	$SessionEntry.MetaInformation.Version -Value "$Status" 
-	$SessionEntry.MetaInformation.AssetTag -Value "$Title" 
-	$SessionEntry.MetaInformation.CustomField1Value -Value "$Audience" 
-	$SessionEntry.MetaInformation.Description -Value "$Description" 
-	$SessionEntry.MetaInformation.Rack -Value "$VMHost" 
-	$SessionEntry.MetaInformation.FirstName -Value "$POC" 
-	$SessionEntry.MetaInformation.CustomField3Value -Value "$Priority" 
-	$SessionEntry.MetaInformation.CustomField2Value -Value "$Category" 
-	$SessionEntry.MetaInformation.Domain -Value "$Domain" 
-	$SessionEntry.MetaInformation.CustomField4Value -Value "$BackupType" 
-	$SessionEntry.MetaInformation.Site -Value "$Location" 
+	$SessionEntry.MetaInformation.Version = "$Status" 
+	$SessionEntry.MetaInformation.AssetTag = "$Title" 
+	$SessionEntry.MetaInformation.CustomField1Value = "$Audience" 
+	$SessionEntry.MetaInformation.Rack = "$VMHost" 
+	$SessionEntry.MetaInformation.FirstName = "$POC" 
+	$SessionEntry.MetaInformation.CustomField3Value = "$Priority" 
+	$SessionEntry.MetaInformation.CustomField2Value = "$Category" 
+	$SessionEntry.MetaInformation.Domain = "$Domain" 
+	$SessionEntry.MetaInformation.CustomField4Value = "$BackupType" 
+	$SessionEntry.MetaInformation.Site = "$Location"
+	$SessionEntry.Description = "$Description" 
 	Set-RDMSession $ServerEntry
 }
 Update-RDMUI
