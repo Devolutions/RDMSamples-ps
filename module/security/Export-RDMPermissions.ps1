@@ -47,7 +47,7 @@ Set-Content -Path $filename -Value '"Vault","Folder","RoleOverride","ViewRoles",
 # $createCSV = {} | Select "Vault","Folder","RoleOverride","ViewRoles","Add","Edit","Delete","ViewPassword","Execute","EditSecurity","ConnectionHistory","PasswordHistory","Remotetools","Inventory","Attachment","EditAttachment","Handbook","EditHandbook","EditInformation" | Export-Csv $fileName
 # $csvFile = Import-Csv $fileName
 
-# Adapt the data source name
+# Set the data source
 $ds = Get-RDMDataSource -Name $dsName
 Set-RDMCurrentDataSource $ds
 

@@ -42,18 +42,14 @@ if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
 	Install-Module RemoteDesktopManager -Scope CurrentUser
 }
 
-# Adapt the data source name
-$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
-Set-RDMCurrentDataSource $ds
-
 if (-not [string]::IsNullOrEmpty($logFileName))
 {
     Start-Transcript -Path $logFileName -Force
 }
 
+# Set the data source
 $ds = Get-RDMDataSource -Name $dsName
 Set-RDMCurrentDataSource $ds
-Update-RDMUI
 
 $CSVpermissions = Import-Csv $fileName
 

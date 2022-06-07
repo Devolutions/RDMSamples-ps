@@ -19,10 +19,6 @@ if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
 	Install-Module RemoteDesktopManager -Scope CurrentUser
 }
 
-# Adapt the data source name
-$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
-Set-RDMCurrentDataSource $ds
-
 function Rename-Role
 {
     param (
@@ -36,9 +32,10 @@ function Rename-Role
         [bool]$chgRole		
     )
 
+    # Set the data source
     $ds = Get-RDMDataSource -Name $dsName
     Set-RDMCurrentDataSource $ds
-    Update-RDMUI
+
 
     # Renaming the role
     if ($chgRole)
