@@ -11,10 +11,14 @@ Version      : 1.1
 Date         : 2021-09-07
 ###################>
 
-#Verify if the RDM PS module is loaded, if not, import it
-if ( ! (Get-module RemoteDesktopManager.PowerShellModule )) {
-    Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1" 
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
 }
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
 
 #Location of the CSV file you want to export the RDM sessions to
 $exportFileName = "c:\Backup\RDMCredentialsData_$(get-date -f yyyy-MM-dd).csv"

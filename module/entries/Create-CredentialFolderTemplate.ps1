@@ -1,6 +1,14 @@
 #source: https://forum.devolutions.net/topics/35604/import-script--create-a-credential-then-a-folder-object-from-a-templat
 
-Import-Module "${env:ProgramFiles(x86)}\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1" 
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
+}
+
+# Adapt the data source name
+$ds = Get-RDMDataSource -Name "NameOfYourDataSourceHere"
+Set-RDMCurrentDataSource $ds
+ 
 $creds =New-RDMSession -Name "VMware server root" -Type Credential -Group "Acme Inc\Credentials\Vendors" 
 $creds.Credentials.UserName="root" 
 Set-RDMSession $creds -refresh

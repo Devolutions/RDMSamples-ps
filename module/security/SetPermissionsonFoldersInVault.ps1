@@ -37,10 +37,9 @@ param (
     [string]$logFileName
     )
 
-# Load RDM PowerShell module. 
-# Adapt the folder's name if you are not using the default installation path.
-if (-not (Get-Module RemoteDesktopManager.PowerShellModule)) {
-    Import-Module 'C:\Program Files (x86)\Devolutions\Remote Desktop Manager\RemoteDesktopManager.PowerShellModule.psd1'
+#check if RDM PS module is installed
+if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
+	Install-Module RemoteDesktopManager -Scope CurrentUser
 }
 
 if (-not [string]::IsNullOrEmpty($logFileName))
@@ -48,9 +47,9 @@ if (-not [string]::IsNullOrEmpty($logFileName))
     Start-Transcript -Path $logFileName -Force
 }
 
+# Set the data source
 $ds = Get-RDMDataSource -Name $dsName
 Set-RDMCurrentDataSource $ds
-Update-RDMUI
 
 $CSVpermissions = Import-Csv $fileName
 
@@ -125,8 +124,8 @@ foreach ($CSVPerm in $CSVpermissions)
                     $permission.Override = "Custom"
                     [string]$tempPerm = $object_properties.Value
                     $permStr = $tempPerm -replace [Regex]::Escape(";"), ", "
-                    $permission.Roles = $perm
                     $perm = $tempPerm.Split(';')
+                    $permission.Roles = $perm
                     $permission.RoleValues = $permStr
                 }
                 $otherPermissions += $permission
