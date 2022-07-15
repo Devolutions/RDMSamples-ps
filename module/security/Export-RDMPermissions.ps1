@@ -6,6 +6,8 @@
 # $dsName      : Name of the RDM data source.
 # $fileName    : Name and full path of the exported CSV file.
 # $logFileName : Name and full path of the log file. To be used with the -Verbose switch for maximum log information.
+# $vaultName   : Name of a vault we want to export the permissions.
+# $folderLevel : Depth of the folders' level we want to get the permissions (None for all folders, 1 for root folders, 2 for root and first subfolders, etc).
 #
 # CSV file headers
 # Vault             : Name of the Vault
@@ -34,7 +36,11 @@ param (
     [Parameter(Mandatory=$True,Position=2)]
     [string]$fileName,
     [Parameter(Mandatory=$false,Position=3)]
-    [string]$logFileName
+    [string]$logFileName,
+    [Parameter(Mandatory=$false,Position=3)]
+    [string]$vaultName,
+    [Parameter(Mandatory=$false,Position=3)]
+    [string]$folderLevel
     )
 
 #check if RDM PS module is installed
@@ -43,7 +49,7 @@ if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
 }
 
 # CSV file creation
-Set-Content -Path $filename -Value '"Vault","Folder","RoleOverride","ViewRoles","Add","Edit","Delete","ViewPassword","Execute","EditSecurity","ConnectionHistory","PasswordHistory","Remotetools","Inventory","Attachment","EditAttachment","Handbook","EditHandbook","EditInformation"'
+Set-Content -Path $filename -Value '"Vault","Folder","RoleOverride","ViewRoles","Add","Edit","Move","Delete","ViewPassword","Execute","EditSecurity","ConnectionHistory","PasswordHistory","Remotetools","Inventory","Attachment","EditAttachment","Handbook","EditHandbook","EditInformation"'
 # $createCSV = {} | Select "Vault","Folder","RoleOverride","ViewRoles","Add","Edit","Delete","ViewPassword","Execute","EditSecurity","ConnectionHistory","PasswordHistory","Remotetools","Inventory","Attachment","EditAttachment","Handbook","EditHandbook","EditInformation" | Export-Csv $fileName
 # $csvFile = Import-Csv $fileName
 
@@ -56,7 +62,14 @@ if (-not [string]::IsNullOrEmpty($logFileName))
     Start-Transcript -Path $logFileName -Force
 }
 
-$vaults = Get-RDMRepository
+if (-not [string]::IsNullOrEmpty($vaultName))
+{
+    $vaults = Get-RDMRepository -Name $vaultName
+}
+else
+{
+    $vaults = Get-RDMRepository
+}
 
 foreach ($vault in $vaults)
 {
@@ -66,8 +79,15 @@ foreach ($vault in $vaults)
     $vaultName = $vault.Name
     Write-Verbose "Vault $vaultName selected..."
     
-    $folders = Get-RDMSession | where {$_.ConnectionType -eq "Group"}
-
+    if (-not [string]::IsNullOrEmpty($folderLevel))
+    {
+        $folders = Get-RDMSession | where {$_.ConnectionType -eq "Group" -and (($_.Group).Split("\").GetUpperBound(0) -le ($folderLevel - 1))}
+    }
+    else
+    {
+        $folders = Get-RDMSession | where {$_.ConnectionType -eq "Group"}
+    }
+    
     foreach ($folder in $folders)
     {
         $csvFile = [PSCustomObject]@{
@@ -77,6 +97,7 @@ foreach ($vault in $vaults)
             ViewRoles = ""
             Add = ""
             Edit = ""
+            Move = ""
             Delete = ""
             ViewPassword = ""
             Execute = ""
@@ -92,9 +113,6 @@ foreach ($vault in $vaults)
             EditInformation = ""
         }
         
-        # $csvFile.Vault = $vaultName
-        # $csvFile.Folder = $folder.Group
-        # $csvFile.RoleOverride = $folder.Security.RoleOverride
         if ($csvFile.RoleOverride -eq "Custom")
         {
             if ($folder.Security.ViewOverride -in "Everyone", "Default", "Never")
