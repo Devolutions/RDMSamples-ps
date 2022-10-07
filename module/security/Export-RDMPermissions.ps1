@@ -121,7 +121,7 @@ foreach ($vault in $vaults)
             }
             else 
             {
-                $csvFile.ViewRoles = $folder.Security.ViewRoles
+                $csvFile.ViewRoles = ($folder.Security.ViewRoles -join ";")
             }
 
             $folderPermissions = $folder.Security.Permissions
