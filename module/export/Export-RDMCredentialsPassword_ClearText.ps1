@@ -33,10 +33,12 @@ foreach ($vault in $vaults){
     Set-RDMCurrentRepository $vault
     Update-RDMUI
     #Get all the sessions in the current vault
-    $RDMsessions = Get-RDMSession | Where-Object {$_.ConnectionType -ne "Group"}  | Select-Object -Property Name, ID, ConnectionType, Group, Host, HostUserName
+    $RDMsessions = Get-RDMSession | Where-Object {$_.ConnectionType -ne "Group"}  | Select-Object -Property Name, ID, ConnectionType, Group, Host
 
     #Iterate in every session
     foreach ($session in $RDMsessions){
+        #Add the username field
+        $session | Add-Member -MemberType NoteProperty "Username" -Value (Get-RDMSessionUserName -ID $session.id)
         #Add the password field as clear text to the session
         $session | Add-Member -MemberType NoteProperty "Password" -Value (get-RDMSessionPassword -ID $session.id -AsPlainText)
         #Export the session to a CSV file to the path configured earlier. 
