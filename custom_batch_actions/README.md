@@ -67,5 +67,5 @@ $RDM.Save();
 > [Some more examples][2]
 
 
-  [1]: https://help.remotedesktopmanager.com/pscustomactions.html
-  [2]: https://help.remotedesktopmanager.com/powershell_batchactionssamples.html
+  [1]: https://helprdm.devolutions.net/pscustomactions.html
+  [2]: https://helprdm.devolutions.net/powershell_batchactionssamples.html
