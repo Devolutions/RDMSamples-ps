@@ -18,8 +18,8 @@ $template = Get-RDMTemplate -Type shared | where-object {$_.Name -eq "PSM-Full"}
 #>
 #-----------------------------------[Main]-------------------------------------
 #check if RDM PS module is installed
-if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
-	Install-Module RemoteDesktopManager -Scope CurrentUser
+if(-not (Get-Module Devolutions.PowerShell -ListAvailable)){
+    Install-Module Devolutions.PowerShell -Scope CurrentUser
 }
 
 # Adapt the data source name

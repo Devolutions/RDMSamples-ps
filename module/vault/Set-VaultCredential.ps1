@@ -1,7 +1,7 @@
 #source: https://forum.devolutions.net/topics/34565/is-it-possible-to-changeset-the-credentials-setting-on-the-vault-using
 #check if RDM PS module is installed
-if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
-	Install-Module RemoteDesktopManager -Scope CurrentUser
+if(-not (Get-Module Devolutions.PowerShell -ListAvailable)){
+    Install-Module Devolutions.PowerShell -Scope CurrentUser
 }
 
 # Adapt the data source name
