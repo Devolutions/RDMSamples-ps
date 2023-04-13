@@ -1,7 +1,7 @@
 #source: https://forum.devolutions.net/topics/35567/powershell-session--login-to-365-services-without-the-need-to-fill-in-
 #check if RDM PS module is installed
-if(-not (Get-Module RemoteDesktopManager -ListAvailable)){
-	Install-Module RemoteDesktopManager -Scope CurrentUser
+if(-not (Get-Module Devolutions.PowerShell -ListAvailable)){
+    Install-Module Devolutions.PowerShell -Scope CurrentUser
 }
 
 # Adapt the data source name
