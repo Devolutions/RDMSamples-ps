@@ -1,7 +1,7 @@
 #requires -version 4
 <#
 .SYNOPSIS
-  Mass edit SubConnections (parent/childs) in RDM
+  Mass edit SubConnections (parent/childs) in RDM version 2022.2.x or lower only.
 
 .DESCRIPTION
   Mass edit SubConnections in RDM by Un-Parenting SubConnections by ConnectionType, 
