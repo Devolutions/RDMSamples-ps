@@ -11,21 +11,21 @@
 # Vault             : Name of the Vault
 # Folder            : Folder full path (no leading or trailing "\")
 # RoleOverride      : Default, Everyone, Never or Custom
-# ViewRoles         : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Add               : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Edit              : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Delete            : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# ViewPassword      : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Execute           : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# EditSecurity      : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# ConnectionHistory : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# PasswordHistory   : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Remotetools       : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Inventory         : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Attachment        : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# EditAttachment    : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Handbook          : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# EditHandbook      : Default, Everyone, Never or list of Roles and/or Users separated with ";"
+# ViewRoles         : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# Add               : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# Edit              : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# Delete            : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# ViewPassword      : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# Execute           : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# EditSecurity      : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# ConnectionHistory : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# PasswordHistory   : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# Remotetools       : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# Inventory         : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# Attachment        : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# EditAttachment    : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# Handbook          : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
+# EditHandbook      : Default, Everyone, Never or list of Roles and/or Users separated with ";". User accounts need to end with "|u" to be added in the permissions (ex:"bob@windjammer.loc|u")
 # 
 
 param (
