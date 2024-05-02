@@ -18,7 +18,7 @@
 # Edit              : Default, Everyone, Never or list of Roles and/or Users separated with ";"
 # Delete            : Default, Everyone, Never or list of Roles and/or Users separated with ";"
 # ViewPassword      : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# ViewSensitiveInformation : Default, Everyone, Never or list of Roles and/or Users separated with ";"
+# ViewSensitiveInformation : Default, Everyone, Never or list of Roles and/or Users separated with ";" 
 # Execute           : Default, Everyone, Never or list of Roles and/or Users separated with ";"
 # EditSecurity      : Default, Everyone, Never or list of Roles and/or Users separated with ";"
 # ConnectionHistory : Default, Everyone, Never or list of Roles and/or Users separated with ";"
