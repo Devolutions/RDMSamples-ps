@@ -17,7 +17,6 @@ $repos = Get-RDMRepository
 foreach ($repo in $repos)
 {
     Set-RDMCurrentRepository $repo
-    Update-RDMUI
 
     $sessions = Get-RDMSession
     $reponame = $repo.name
