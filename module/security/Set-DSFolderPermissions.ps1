@@ -139,7 +139,7 @@ function Set-DSFolderPermissions ()
         [Parameter(Mandatory)]
         [string]$FolderID,
         [Parameter(Mandatory)]
-        [ValidateSet('View','Add','Edit','Move','Delete','ViewPassword','ViewSensitive','Connect')]
+        [ValidateSet('View','Add','Edit','Move','Delete','ViewPassword','ViewSensitive','Connect','EditSecurity','ConnectionHistory','PasswordHistory','Remotetools','Inventory','Attachment','EditAttachment','Handbook','EditHandbook','EditInformation')]
         [string]$Permission,
         [Parameter(Mandatory)]
         [ValidateSet('Inherited','Custom','Allowed', 'Disallowed')]
@@ -170,9 +170,18 @@ function Set-DSFolderPermissions ()
         "Edit" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Edit; Break}
         "Move" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Move; Break}
         "Delete" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Delete; Break}
-        "View Password" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ViewPassword; Break}
-        "View Sensitive" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ViewSensitive; Break}
-        "Connect" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Connect; Break}
+        "ViewPassword" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ViewPassword; Break}
+        "ViewSensitive" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ViewSensitive; Break}
+        "EditSecurity" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditSecurity; Break}
+        "ConnectionHistory" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ConnectionHistory; Break}
+        "PasswordHistory" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::PasswordHistory; Break}
+        "Remotetools" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Remotetools; Break}
+        "Inventory" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Inventory; Break}
+        "Attachment" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Attachment; Break}
+        "EditAttachment" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditAttachment; Break}
+        "Handbook" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Handbook; Break}
+        "EditHandbook" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditHandbook; Break}
+        "EditInformation" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditInformation; Break}
     }
 
     # Retrieve back the entry properties if it has been update from above Add or Edit security properties functions
