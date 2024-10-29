@@ -44,12 +44,19 @@ function Get-DSInheritedPermissions ()
             if ($folderName -match '\\$') {
                 $folderName = $folderName.Substring(0, $folderName.Length - 1)
             }
+
+            if ([string]::IsNullOrEmpty($resultEntry.RepositoryID)) {
+                $vaultID = "00000000-0000-0000-0000-000000000000"
+            }
+            else {
+                $vaultID = "$resultEntry.RepositoryID"
+            }
         
             if ([string]::IsNullOrEmpty($folderName)) {
-                $folderID = (Get-DSFolders -vaultID $resultEntry.RepositoryID -IncludeSubFolders | Where-Object { $_.group -eq "" }).ID
+                $folderID = (Get-DSFolders -vaultID $vaultID -IncludeSubFolders | Where-Object { $_.group -eq "" }).ID
                 $result = Get-DSFolder -FolderID $folderID
             } else {
-                $folderID = (Get-DSFolders -vaultID $resultEntry.RepositoryID -IncludeSubFolders | Where-Object { $_.group -eq $folderName }).ID
+                $folderID = (Get-DSFolders -vaultID $vaultID -IncludeSubFolders | Where-Object { $_.group -eq $folderName }).ID
                 $result = Get-DSInheritedPermissions $folderID
             }
         }
