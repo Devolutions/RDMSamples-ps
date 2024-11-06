@@ -13,25 +13,26 @@
 # CSV file headers
 # Vault             : Name of the Vault
 # Folder            : Folder full path (no leading or trailing "\")
-# RoleOverride      : Default, Everyone, Never or Custom
-# ViewRoles         : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Add               : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Edit              : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Delete            : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# ViewPassword      : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# ViewSensitiveInformation : Default, Everyone, Never or list of Roles and/or Users separated with ";" 
-# Execute           : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# EditSecurity      : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# ConnectionHistory : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# PasswordHistory   : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Remotetools       : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Inventory         : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Attachment        : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# EditAttachment    : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# Handbook          : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# EditHandbook      : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# DeleteHandbook    : Default, Everyone, Never or list of Roles and/or Users separated with ";"
-# EditInformation   : Default, Everyone, Never or list of Roles and/or Users separated with ";"
+# Entry             : Name of the entry (a leading "\" specifies a folder entry type)
+# Permission        : Default, Everyone, Never or Custom
+# ViewRoles         : True, Inherited
+# Add               : True, Inherited
+# Edit              : True, Inherited
+# Delete            : True, Inherited
+# ViewPassword      : True, Inherited
+# ViewSensitiveInformation : True, Inherited 
+# Execute           : True, Inherited
+# EditSecurity      : True, Inherited
+# ConnectionHistory : True, Inherited
+# PasswordHistory   : True, Inherited
+# Remotetools       : True, Inherited
+# Inventory         : True, Inherited
+# Attachment        : True, Inherited
+# EditAttachment    : True, Inherited
+# Handbook          : True, Inherited
+# EditHandbook      : True, Inherited
+# DeleteHandbook    : True, Inherited
+# EditInformation   : True, Inherited
 
 param (
     [Parameter(Mandatory=$True,Position=1)]
@@ -219,12 +220,6 @@ foreach ($vault in $vaults)
         }
         elseif ($entry.Security.RoleOverride -eq "Default")
         {
-            $parent = $entry
-            while ($parent.Security.RoleOverride -eq "Default")
-            {
-                $entryName = 
-
-            }
             $csvFile.View = "Inherited"
             $csvFile.Add = "Inherited"
             $csvFile.Edit = "Inherited"
@@ -246,7 +241,8 @@ foreach ($vault in $vaults)
             $csvFile.EditInformation = "Inherited"
         }
         
-        if ($csvfile.Execute -eq "True" -or $csvfile.ViewPassword -eq "True" -or $csvfile.ViewPassword -eq "Inherited")
+        # Filter to provide only entries with View Password or Execute direct or inherited permissions 
+        if ($csvfile.Execute -eq "True" -or $csvfile.Execute -eq "Inherited" -or $csvfile.ViewPassword -eq "True" -or $csvfile.ViewPassword -eq "Inherited")
         {
             $csvFile | Export-Csv $fileName -Append
             Write-Verbose "Permissions exported for entry $entry..."
