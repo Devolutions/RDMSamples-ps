@@ -112,6 +112,7 @@ foreach ($vault in $vaults)
             EditAttachment = ""
             Handbook = ""
             EditHandbook = ""
+            DeleteHandbook = ""
             EditInformation = ""
         }
         
