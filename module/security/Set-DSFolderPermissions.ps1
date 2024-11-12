@@ -49,7 +49,7 @@ function Get-DSInheritedPermissions ()
                 $vaultID = "00000000-0000-0000-0000-000000000000"
             }
             else {
-                $vaultID = "$resultEntry.RepositoryID"
+                $vaultID = $resultEntry.RepositoryID
             }
         
             if ([string]::IsNullOrEmpty($folderName)) {
@@ -227,38 +227,87 @@ function Set-DSFolderPermissions ()
             }
             else 
             {
+                [bool]$updatePerm = $false
                 $perms = New-Object RemoteDesktopManager.PowerShellModule.Private.models.ConnectionPermission
                 $perms.Right = $Right
                 $perms.Override = 'Custom'
+
                 foreach($permissions in $Folder.security.permissions)
                 {
                     if ($permissions.Right -eq $Right)
                     {
-                        foreach($Item in $Items)
-                        {
-                            $user = Get-DSUser -All | where {$_.Name -eq $Item}
-                            if ($user)
-                            {
-                                $ItemsID += $user.ID
-                            }
-                            
-                            $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
-                            If ($usergroup)
-                            {
-                                $ItemsID += $usergroup.ID
-                            }
-                        }
                         switch ($Operation)
                         {
-                            "Append" {$perms.roles += $ItemsID; Break}
-                            "Replace" {$perms.roles = $ItemsID; Break}
-                        }
+                            "Append" 
+                            {
+                                foreach($Item in $Items)
+                                {
+                                    $user = Get-DSUser -All | where {$_.Name -eq $Item}
+                                    if ($user)
+                                    {
+                                        $ItemsID += $user.ID
+                                    }
+                                    
+                                    $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
+                                    If ($usergroup)
+                                    {
+                                        $ItemsID += $usergroup.ID
+                                    }
+                                }
 
-                        Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
-                        $Folder = Get-DSEntry -EntryID $FolderID
+                                $perms.Roles = $permissions.roles + $ItemsID
+                                Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
+                                $Folder = Get-DSEntry -EntryID $FolderID
+                                $updatePerm = $true
+                                Break
+                            }
+                            "Replace" 
+                            {
+                                foreach($Item in $Items)
+                                {
+                                    $user = Get-DSUser -All | where {$_.Name -eq $Item}
+                                    if ($user)
+                                    {
+                                        $ItemsID += $user.ID
+                                    }
+                                    
+                                    $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
+                                    If ($usergroup)
+                                    {
+                                        $ItemsID += $usergroup.ID
+                                    }
+                                }
+                                $perms.roles = $ItemsID
+                                Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
+                                $Folder = Get-DSEntry -EntryID $FolderID
+                                $updatePerm = $true
+                                Break
+                            }        
+                        }
                         Break
                     }
-                    Break
+                }
+
+                if (!$updatePerm)
+                {
+                    foreach($Item in $Items)
+                    {
+                        $user = Get-DSUser -All | where {$_.Name -eq $Item}
+                        if ($user)
+                        {
+                            $ItemsID += $user.ID
+                        }
+                        
+                        $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
+                        If ($usergroup)
+                        {
+                            $ItemsID += $usergroup.ID
+                        }
+                    }
+                    $perms.roles = $ItemsID
+                    Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
+                    $Folder = Get-DSEntry -EntryID $FolderID
+                    $updatePerm = $true
                 }
             }
         }
