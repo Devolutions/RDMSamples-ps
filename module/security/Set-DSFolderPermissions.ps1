@@ -304,7 +304,16 @@ function Set-DSFolderPermissions ()
                             $ItemsID += $usergroup.ID
                         }
                     }
-                    $perms.roles = $ItemsID
+
+                    if ($Right -eq 'View' -and $Operation -eq "Append")
+                    {
+                        $perms.Roles = $ItemsID + $Folder.security.ViewRoles
+                    }
+                    else 
+                    {
+                        $perms.roles = $ItemsID
+                    }
+                    
                     Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
                     $Folder = Get-DSEntry -EntryID $FolderID
                     $updatePerm = $true
