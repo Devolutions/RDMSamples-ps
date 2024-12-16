@@ -22,21 +22,34 @@ Description: Get the permissions from a parent folder if the permissions are set
 
 Parameter: 
     FolderID: ID of the folder.
+    isPAM: True for a PAM account, False or empty for non-PAM account
 #>
 function Get-DSInheritedPermissions ()
 {
     param (
-        [string]$FolderID
+        [string]$FolderID,
+        [switch]$isPAM=$false
     )
 
-    $resultEntry = Get-DSFolder -FolderID $FolderID
+    if ($isPAM){
+        $resultEntry = Get-DSPAMFolder -FolderID $FolderID
+    }
+    else
+    {
+        $resultEntry = Get-DSFolder -FolderID $FolderID
+    }
 
     if ($resultEntry.Security -and $resultEntry.security.roleOverride -ne 3 -and $resultEntry.security.roleOverride -ne 4 -and $resultEntry.security.roleOverride -ne $null)
     {
         $result = $resultEntry
     } else {
         If (-NOT $resultEntry.group) {
-            $folderID = (Get-DSFolders -vaultID $resultEntry.RepositoryID -IncludeSubFolders | Where-Object { $_.connectionType -eq 92 }).ID
+            if ($isPAM){
+                $vaultID = (Get-DSFolders -vaultID $resultEntry.RepositoryID -IncludeSubFolders | Where-Object {($_.connectionType -eq 124) -and ($_.connectionType.data.PAMConnectionType -eq 14)}).ID
+            }
+            else {
+                $vaultID = (Get-DSFolders -vaultID $resultEntry.RepositoryID -IncludeSubFolders | Where-Object { $_.connectionType -eq 92 }).ID
+            }           
             $result = Get-DSFolder -FolderID $vaultId
         } Else {
             $group = $resultEntry.group
@@ -53,11 +66,25 @@ function Get-DSInheritedPermissions ()
             }
         
             if ([string]::IsNullOrEmpty($folderName)) {
-                $folderID = (Get-DSFolders -vaultID $vaultID -IncludeSubFolders | Where-Object { $_.group -eq "" }).ID
-                $result = Get-DSFolder -FolderID $folderID
+                if ($isPAM)
+                {
+                    $folderID = (Get-DSPAMFolders -vaultID $vaultID | Where-Object { $_.group -eq "" }).ID
+                    $result = Get-DSPAMFolder -FolderID $folderID
+                }
+                else
+                {
+                    $folderID = (Get-DSFolders -vaultID $vaultID -IncludeSubFolders | Where-Object { $_.group -eq "" }).ID
+                    $result = Get-DSFolder -FolderID $folderID
+                }
             } else {
-                $folderID = (Get-DSFolders -vaultID $vaultID -IncludeSubFolders | Where-Object { $_.group -eq $folderName }).ID
-                $result = Get-DSInheritedPermissions $folderID
+                if ($isPAM)
+                {
+                    $folderID = (Get-DSPAMFolders -vaultID $vaultID | Where-Object { $_.group -eq $folderName }).ID  
+                }
+                else {
+                    $folderID = (Get-DSFolders -vaultID $vaultID -IncludeSubFolders | Where-Object { $_.group -eq $folderName }).ID
+                }                
+                $result = Get-DSInheritedPermissions $folderID $isPAM
             }
         }
         
