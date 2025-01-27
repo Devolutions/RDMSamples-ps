@@ -171,152 +171,68 @@ function Set-DSFolderPermissions ()
 {
     param (
         [Parameter(Mandatory)]
-        [string]$FolderID,
-        [Parameter(Mandatory)]
-        [ValidateSet('View','Add','Edit','Move','Delete','ViewPassword','ViewSensitive','Connect','EditSecurity','ConnectionHistory','PasswordHistory','Remotetools','Inventory','Attachment','EditAttachment','Handbook','EditHandbook','EditInformation')]
-        [string]$Permission,
-        [Parameter(Mandatory)]
-        [ValidateSet('Inherited','Custom','Allowed', 'Disallowed')]
-        [string]$Role,
-        [Parameter(Mandatory)]
-        [ValidateSet('Append','Replace')]
-        [string]$Operation,
-        $Items
+        [string]$CSVFilePath
     )
 
-    $resultEntry = Get-DSEntry -EntryID $FolderID 
-    if (![bool]($resultEntry.PSobject.Properties.name -match "Security"))
-    {
-        Add-DSSecurityProperty $resultEntry.ID
-    }
-    elseif ($resultEntry.security.roleOverride -eq 3 -or $resultEntry.security.roleOverride -eq 4 -or $resultEntry.security.roleOverride -eq $null -or $resultEntry.security.permissions -eq $null)
-    {
-        Edit-DSSecurityProperty $resultEntry.ID
-    }
+    $CSVpermissions = Import-Csv $CSVFilePath
 
-    $ItemsID = @()
-
-    # Permissions to update
-    switch ($Permission)
+    foreach ($CSVPerm in $CSVpermissions)
     {
-        "View" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::View; Break}
-        "Add" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Add; Break}
-        "Edit" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Edit; Break}
-        "Move" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Move; Break}
-        "Delete" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Delete; Break}
-        "ViewPassword" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ViewPassword; Break}
-        "ViewSensitive" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ViewSensitive; Break}
-        "EditSecurity" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditSecurity; Break}
-        "ConnectionHistory" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ConnectionHistory; Break}
-        "PasswordHistory" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::PasswordHistory; Break}
-        "Remotetools" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Remotetools; Break}
-        "Inventory" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Inventory; Break}
-        "Attachment" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Attachment; Break}
-        "EditAttachment" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditAttachment; Break}
-        "Handbook" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Handbook; Break}
-        "EditHandbook" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditHandbook; Break}
-        "EditInformation" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditInformation; Break}
-    }
+        $folderID = $CSVPerm.FolderID
+        $Permission = $CSVPerm.Permission
+        $Role = $CSVPerm.Role 
+        $Operation = $CSVPerm.Operation
+        $Items = $CSVPerm.Items
+        $Items = $Items.Split(';')
 
-    # Retrieve back the entry properties if it has been update from above Add or Edit security properties functions
-    $Folder = Get-DSEntry -EntryID $FolderID
-
-    # Right to update
-    switch ($Role)
-    {
-        "Custom" 
+        $resultEntry = Get-DSEntry -EntryID $FolderID 
+        if (![bool]($resultEntry.PSobject.Properties.name -match "Security"))
         {
-            if ($Folder.security.permissions -eq $null)
+            Add-DSSecurityProperty $resultEntry.ID
+        }
+        elseif ($resultEntry.security.roleOverride -eq 3 -or $resultEntry.security.roleOverride -eq 4 -or $resultEntry.security.roleOverride -eq $null -or $resultEntry.security.permissions -eq $null)
+        {
+            Edit-DSSecurityProperty $resultEntry.ID
+        }
+
+        $ItemsID = @()
+
+        # Permissions to update
+        switch ($Permission)
+        {
+            "View" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::View; Break}
+            "Add" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Add; Break}
+            "Edit" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Edit; Break}
+            "Move" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Move; Break}
+            "Delete" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Delete; Break}
+            "ViewPassword" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ViewPassword; Break}
+            "ViewSensitive" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ViewSensitive; Break}
+            "EditSecurity" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditSecurity; Break}
+            "ConnectionHistory" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::ConnectionHistory; Break}
+            "PasswordHistory" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::PasswordHistory; Break}
+            "Remotetools" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Remotetools; Break}
+            "Inventory" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Inventory; Break}
+            "Attachment" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Attachment; Break}
+            "EditAttachment" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditAttachment; Break}
+            "Handbook" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::Handbook; Break}
+            "EditHandbook" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditHandbook; Break}
+            "EditInformation" {$Right = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleRight]::EditInformation; Break}
+        }
+
+        # Retrieve back the entry properties if it has been update from above Add or Edit security properties functions
+        $Folder = Get-DSEntry -EntryID $FolderID
+
+        # Right to update
+        switch ($Role)
+        {
+            "Custom" 
             {
-                $perms = New-Object RemoteDesktopManager.PowerShellModule.Private.models.ConnectionPermission
-                $perms.Right = $Right
-                $perms.Override = 'Custom'
-                
-                foreach($Item in $Items)
+                if ($Folder.security.permissions -eq $null)
                 {
-                    $user = Get-DSUser -All | where {$_.Name -eq $Item}
-                    if ($user)
-                    {
-                        $ItemsID += $user.ID
-                    }
+                    $perms = New-Object RemoteDesktopManager.PowerShellModule.Private.models.ConnectionPermission
+                    $perms.Right = $Right
+                    $perms.Override = 'Custom'
                     
-                    $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
-                    If ($usergroup)
-                    {
-                        $ItemsID += $usergroup.ID
-                    }
-                }
-
-                $perms.roles += $ItemsID
-
-                Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
-                $Folder = Get-DSEntry -EntryID $FolderID
-            }
-            else 
-            {
-                [bool]$updatePerm = $false
-                $perms = New-Object RemoteDesktopManager.PowerShellModule.Private.models.ConnectionPermission
-                $perms.Right = $Right
-                $perms.Override = 'Custom'
-
-                foreach($permissions in $Folder.security.permissions)
-                {
-                    if ($permissions.Right -eq $Right)
-                    {
-                        switch ($Operation)
-                        {
-                            "Append" 
-                            {
-                                foreach($Item in $Items)
-                                {
-                                    $user = Get-DSUser -All | where {$_.Name -eq $Item}
-                                    if ($user)
-                                    {
-                                        $ItemsID += $user.ID
-                                    }
-                                    
-                                    $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
-                                    If ($usergroup)
-                                    {
-                                        $ItemsID += $usergroup.ID
-                                    }
-                                }
-
-                                $perms.Roles = $permissions.roles + $ItemsID
-                                Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
-                                $Folder = Get-DSEntry -EntryID $FolderID
-                                $updatePerm = $true
-                                Break
-                            }
-                            "Replace" 
-                            {
-                                foreach($Item in $Items)
-                                {
-                                    $user = Get-DSUser -All | where {$_.Name -eq $Item}
-                                    if ($user)
-                                    {
-                                        $ItemsID += $user.ID
-                                    }
-                                    
-                                    $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
-                                    If ($usergroup)
-                                    {
-                                        $ItemsID += $usergroup.ID
-                                    }
-                                }
-                                $perms.roles = $ItemsID
-                                Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
-                                $Folder = Get-DSEntry -EntryID $FolderID
-                                $updatePerm = $true
-                                Break
-                            }        
-                        }
-                        Break
-                    }
-                }
-
-                if (!$updatePerm)
-                {
                     foreach($Item in $Items)
                     {
                         $user = Get-DSUser -All | where {$_.Name -eq $Item}
@@ -332,39 +248,125 @@ function Set-DSFolderPermissions ()
                         }
                     }
 
-                    if ($Right -eq 'View' -and $Operation -eq "Append")
-                    {
-                        $perms.Roles = $ItemsID + $Folder.security.ViewRoles
-                    }
-                    else 
-                    {
-                        $perms.roles = $ItemsID
-                    }
-                    
+                    $perms.roles += $ItemsID
+
                     Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
                     $Folder = Get-DSEntry -EntryID $FolderID
-                    $updatePerm = $true
+                }
+                else 
+                {
+                    [bool]$updatePerm = $false
+                    $perms = New-Object RemoteDesktopManager.PowerShellModule.Private.models.ConnectionPermission
+                    $perms.Right = $Right
+                    $perms.Override = 'Custom'
+
+                    foreach($permissions in $Folder.security.permissions)
+                    {
+                        if ($permissions.Right -eq $Right)
+                        {
+                            switch ($Operation)
+                            {
+                                "Append" 
+                                {
+                                    foreach($Item in $Items)
+                                    {
+                                        $user = Get-DSUser -All | where {$_.Name -eq $Item}
+                                        if ($user)
+                                        {
+                                            $ItemsID += $user.ID
+                                        }
+                                        
+                                        $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
+                                        If ($usergroup)
+                                        {
+                                            $ItemsID += $usergroup.ID
+                                        }
+                                    }
+
+                                    $perms.Roles = $permissions.roles + $ItemsID
+                                    Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
+                                    $Folder = Get-DSEntry -EntryID $FolderID
+                                    $updatePerm = $true
+                                    Break
+                                }
+                                "Replace" 
+                                {
+                                    foreach($Item in $Items)
+                                    {
+                                        $user = Get-DSUser -All | where {$_.Name -eq $Item}
+                                        if ($user)
+                                        {
+                                            $ItemsID += $user.ID
+                                        }
+                                        
+                                        $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
+                                        If ($usergroup)
+                                        {
+                                            $ItemsID += $usergroup.ID
+                                        }
+                                    }
+                                    $perms.roles = $ItemsID
+                                    Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
+                                    $Folder = Get-DSEntry -EntryID $FolderID
+                                    $updatePerm = $true
+                                    Break
+                                }        
+                            }
+                            Break
+                        }
+                    }
+
+                    if (!$updatePerm)
+                    {
+                        foreach($Item in $Items)
+                        {
+                            $user = Get-DSUser -All | where {$_.Name -eq $Item}
+                            if ($user)
+                            {
+                                $ItemsID += $user.ID
+                            }
+                            
+                            $usergroup = Get-DSRole -All | where {$_.Name -eq $Item}
+                            If ($usergroup)
+                            {
+                                $ItemsID += $usergroup.ID
+                            }
+                        }
+
+                        if ($Right -eq 'View' -and $Operation -eq "Append")
+                        {
+                            $perms.Roles = $ItemsID + $Folder.security.ViewRoles
+                        }
+                        else 
+                        {
+                            $perms.roles = $ItemsID
+                        }
+                        
+                        Set-DSEntityPermission -EntityID $FolderID -Permissions $perms
+                        $Folder = Get-DSEntry -EntryID $FolderID
+                        $updatePerm = $true
+                    }
                 }
             }
+            "Inherited"
+            {
+                $Folder.security.roleOverride  = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleOverride]::Inherited
+                Break
+            }
+            "Never" 
+            {
+                $Folder.security.roleOverride  = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleOverride]::Never
+                Break
+            }
         }
-        "Inherited"
-        {
-            $Folder.security.roleOverride  = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleOverride]::Inherited
-            Break
-        }
-        "Never" 
-        {
-            $Folder.security.roleOverride  = [RemoteDesktopManager.PowerShellModule.Private.enums.SecurityRoleOverride]::Never
-            Break
-        }
-    }
 
-    $group = $Folder.group.Replace($Folder.name, "")
-    if ($group[$group.Length - 1] -eq "\")
-    {
-        $group = $group.SubString(0, $group.Length - 1)
-    }
-    $Folder.group = $group
+        $group = $Folder.group.Replace($Folder.name, "")
+        if ($group[$group.Length - 1] -eq "\")
+        {
+            $group = $group.SubString(0, $group.Length - 1)
+        }
+        $Folder.group = $group
 
-    Update-DSEntryBase -JsonBody (ConvertTo-Json -InputObject $Folder -Depth 10)
+        Update-DSEntryBase -JsonBody (ConvertTo-Json -InputObject $Folder -Depth 10)
+    }
 }
