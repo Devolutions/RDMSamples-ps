@@ -9,7 +9,7 @@ This script override the permissions of a given folder.
 N/A
 
 .EXAMPLE
-Set-DSFolderPermissions -FolderID $entryID -Permission "Add" -Role "Custom" -Operation "Append" -Items $Items
+Set-DSFolderPermissions -CSVFilePath "c:\temp\permissions.csv"
 
 .NOTES
 N/A
@@ -161,11 +161,7 @@ Function: Set-DSFolderPermissions
 Description: Set the permissions on a folder with the given users and/or uer groups.
 
 Parameter: 
-    FolderID: ID of the folder.
-    Permission: Permission to update.
-    Role: Role to set on the permission between Inherited, Custom, Allowed or Disallowed.
-    Operation: Append or replace the current permissions.
-    Items: Users and/or user groups we want to add/replace on permissions.
+    CSVFilePath: path and filename of the CSV file that contains the permissions to update.
 #>
 function Set-DSFolderPermissions ()
 {
